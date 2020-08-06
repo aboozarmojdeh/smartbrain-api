@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
+var cors = require('cors');
 
 // *** for bcrypt-nodejs
-const bcrypt=require('bcrypt-nodejs')
+const bcrypt = require('bcrypt-nodejs')
 
 // *** for bcrypt
 // const bcrypt=require('bcrypt');
@@ -15,35 +16,42 @@ const database = {
             id: '123',
             name: 'aboo',
             email: 'aboo@gmail.com',
-                        entries: 0,
+            password:'aboo',
+            entries: 0,
             joined: new Date()
         },
         {
             id: '124',
             name: 'eli',
             email: 'eli@gmail.com',
-            password: 'bananas',
+            password: 'eli',
             entries: 0,
             joined: new Date()
         }
     ],
-    login:[
+    login: [
         {
-            id:'987',
-            hash:'',
-            email:'aboo@gmail.com'
+            id: '987',
+            hash: '',
+            email: 'aboo@gmail.com'
         }
     ]
 };
 
 // Middlewares **********
 app.use(express.json());
+// app.use(express.urlencoded({extended: false}));
+app.use(cors());
 
 //********************* */
-// app.use(express.urlencoded({extended: false}));
+
+
+
 app.get('/', (req, res) => {
     res.json(database.users)
-})
+});
+
+
 
 app.post('/signin', (req, res) => {
     // // Load hash from your password DB.
@@ -56,36 +64,36 @@ app.post('/signin', (req, res) => {
 
     if (req.body.email === database.users[0].email &&
         req.body.password === database.users[0].password) {
-        res.json('Success Sign in')
+            res.json(database.users[0])
     } else {
         res.status(400).json('Error logging in')
     }
     // res.json(req.body)
 });
 
+
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body;
-    
+
     /// this is bcrypt-nodejs
-    bcrypt.hash(password, null, null, function(err, hash) {
+    bcrypt.hash(password, null, null, function (err, hash) {
         console.log(hash)
-       
+
     });
 
-   
-/// this is bcrypt
-// bcrypt.hash(password, saltRounds, function(err, hash) {
-//     // Store hash in your password DB.
-//     console.log('new hash',hash)
-// });
 
-    
-    
+    /// this is bcrypt
+    // bcrypt.hash(password, saltRounds, function(err, hash) {
+    //     // Store hash in your password DB.
+    //     console.log('new hash',hash)
+    // });
+
+
+
     database.users.push({
         id: '125',
         name: name,
         email: email,
-        password: password,
         entries: 0,
         joined: new Date()
     })
@@ -127,12 +135,3 @@ app.listen(3000, () => {
 
 
 
-//////
-// / --> res=it's working
-// /signin --> POST =success/fail
-// /register --> POST =user
-// /profile/:id -->GET =user
-// /image --> PUT --> =user
-
-
-///////
