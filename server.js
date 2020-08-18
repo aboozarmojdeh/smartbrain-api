@@ -14,8 +14,8 @@ const db=knex({
     }
   });
 
-db.select('*').from('users')
-.then(data=>console.log(data));
+// db.select('*').from('users')
+// .then(data=>console.log(data));
 
 // *** for bcrypt-nodejs
 const bcrypt = require('bcrypt-nodejs')
@@ -119,12 +119,10 @@ app.post('/register', (req, res) => {
 app.get('/profile/:id', (req, res) => {
     const { id } = req.params;
     let found = false;
-    database.users.forEach(user => {
-        if (user.id === id) {
-            found === true;
-            return res.json(user)
-        }
-    })
+   db('users').select('*').where({
+       id:id
+   })
+   .then(user=>console.log(user[0]))
     if (!found) {
         res.status(404).json('Not found')
     }
