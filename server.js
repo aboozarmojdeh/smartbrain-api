@@ -42,7 +42,7 @@ app.use(cors());
 
 
 app.get('/', (req, res) => {
-    res.json(database.users)
+    res.json('it is working')
 });
 
 
